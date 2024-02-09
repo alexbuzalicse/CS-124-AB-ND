@@ -2,6 +2,17 @@
 #include <sstream>
 #include <random>
 
+float euclideanDistance(std::vector<float> x, std::vector<float> y) {
+
+    float sum = 0;
+
+    for (int i = 0; i < x.size(); i++) {
+        sum += (x[i]-y[i])*(x[i]-y[i]);
+    }
+
+    return sqrt(sum);
+}
+
 int main(int argc, char* argv[])
 {
 
@@ -15,33 +26,22 @@ int main(int argc, char* argv[])
     // Declare variables
     std::default_random_engine generator;
     std::uniform_real_distribution<double> distribution(0.0,1.0);
+    std::vector<std::vector<float>> graph (n, std::vector<float>(dimension));
 
-    // float graph[n][n][dimension];
-    std::vector<std::vector<std::vector<float> > > graph (n, std::vector<std::vector<float> >(n, std::vector<float>(dimension)));
-
-    // Generate graph
+    // Generate graph, each row is a vertex with a point in (dimension) dimensions
     for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            for (int k = 0; k < dimension; k++) {
-                graph[i][j][k] = distribution(generator);
-            }
+        for(int j = 0; j < dimension; j++) {
+            graph[i][j] = distribution(generator);
         }
     }
 
-    // Print graph
-    // for(int i = 0; i < n; i++) {
-    //     for(int j = 0; j < n; j++) {
-    //         std::cout << "(";
-    //         for (int k = 0; k < dimension; k++) {
-    //             std::cout << graph[i][j][k];
-    //             if (k != dimension -1) {
-    //                 std::cout << ", ";
-    //             }
-    //         }
-    //         std::cout << ") ";
-    //     }
-    //     std::cout << std::endl;
-    // }  
+    // Get adjacency matrix
+    std::vector<std::vector<float>> adjacencyMatrix (n, std::vector<float>(n));
+    for (int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            adjacencyMatrix[i][j] = euclideanDistance(graph[i], graph[j]);
+        }
+    }
 
     return 0;
 }
