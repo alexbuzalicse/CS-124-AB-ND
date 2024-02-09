@@ -28,20 +28,36 @@ int main(int argc, char* argv[])
     std::uniform_real_distribution<double> distribution(0.0,1.0);
     std::vector<std::vector<float>> graph (n, std::vector<float>(dimension));
 
-    // Generate graph, each row is a vertex with a point in (dimension) dimensions
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < dimension; j++) {
-            graph[i][j] = distribution(generator);
+    // Random edge weight (dimension = 0)
+    if (dimension == 0) {
+        
+        std::vector<std::vector<float>> adjacencyMatrix (n, std::vector<float>(n));
+        for (int i = 0; i < n; i++) {
+            for(int j = i; j < n; j++) {
+                adjacencyMatrix[i][j] = distribution(generator);
+                adjacencyMatrix[j][i] = adjacencyMatrix[i][j];
+            }
+        }
+
+    }
+    
+    else {
+
+        // Generate graph, each row is a vertex with a point in (dimension) dimensions
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < dimension; j++) {
+                graph[i][j] = distribution(generator);
+            }
+        }
+
+        // Get adjacency matrix
+        std::vector<std::vector<float>> adjacencyMatrix (n, std::vector<float>(n));
+        for (int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                adjacencyMatrix[i][j] = euclideanDistance(graph[i], graph[j]);
+            }
         }
     }
-
-    // Get adjacency matrix
-    std::vector<std::vector<float>> adjacencyMatrix (n, std::vector<float>(n));
-    for (int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            adjacencyMatrix[i][j] = euclideanDistance(graph[i], graph[j]);
-        }
-    }
-
+    
     return 0;
 }
