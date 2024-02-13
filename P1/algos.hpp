@@ -15,9 +15,27 @@ using std::uniform_real_distribution;
 using std::stoi;
 
 void run_prim(Graph &graph, Heap &heap) {
+    // this will change the prev list
     int n = graph.get_size();
-    vector<int*> prev_edges(n);
-    // prev_vertex[i] is the previous vertex id for vertex i
+
+    // remember that heap elements are (cost, vertex index)
+    heap.push({0,0});
+
+    while (!heap.empty()) {
+        pair<double, int> u_pair = heap.top();
+        double dist = u_pair.first;
+        double u_ind = u_pair.second;
+
+        heap.pop();
+        graph.add_seen_vertex(u_ind);
+
+        for (unordered_map<int, double> &weight : graph.get_vertex(u_ind)) {
+
+        }
+        
+
+    }
+    
 }
 
 double sum_edges(Graph &graph) {
@@ -33,11 +51,15 @@ double sum_edges(Graph &graph) {
     return total;
 }
 
-double prim_MST(int n) {
+double prim_MST(int n, int dimension) {
     // returns the weight of the MST via Prim's algorithm
     // (doesnt record any info, just spits out a number)
     Graph graph(n);
     Heap heap;
+
+    // initialize graph weights
+    graph.initialize_adjacency_list(dimension);
+
     run_prim(graph, heap);
     return sum_edges(graph);
 }

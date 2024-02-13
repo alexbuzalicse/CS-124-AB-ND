@@ -28,7 +28,7 @@ class Heap {
     // implicitly a min heap
     private:
     // represent the heap with a vector of (dist "d", index of vertex)
-    vector<pair<int, int>> heap;
+    vector<pair<double, int>> heap;
 
     public:
     // default constructor
@@ -37,7 +37,7 @@ class Heap {
     // default destructor
     ~Heap () {}
 
-    Heap (vector<pair<int, int>> &heap) : heap(heap) {
+    Heap (vector<pair<double, int>> &heap) : heap(heap) {
         this->buildHeap();
     }
 
@@ -48,7 +48,7 @@ class Heap {
     }
 
     void print() const {
-        for (const pair<int, int> &p : heap) {
+        for (const pair<double, int> &p : heap) {
             cout << p.first << " ";
         }
         cout << endl;
@@ -72,7 +72,7 @@ class Heap {
 
     pair<int, int> top() const { return heap[0]; }
 
-    void push(pair<int, int> &new_pair) {
+    void push(const pair<double, int> &new_pair) {
         heap.push_back(new_pair);
         int n = heap.size() - 1;
 
@@ -96,7 +96,7 @@ class Heap {
     bool empty() const { return heap.size() == 0; }
 
     // let us index a Heap object outside of the class def
-    pair<int, int>& operator[](int index) { return heap[index]; }
+    pair<double, int>& operator[](int index) { return heap[index]; }
 
 };
 

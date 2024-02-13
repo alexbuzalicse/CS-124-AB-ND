@@ -31,7 +31,7 @@ class Graph {
     int n;
     unordered_map<int, unordered_map<int, double>> adj_list;
     set<int> seen_vertices;
-    vector<int> distances;
+    vector<double> distances;
     vector<int*> prev_verts;
 
     public:
@@ -39,8 +39,9 @@ class Graph {
     Graph() {}
     
     Graph (int n) : n(n) {
-        vector<int> temp2(n);
+        vector<double> temp2(n, __DBL_MAX__);
         distances = temp2;
+        distances[0] = 0.0;
         vector<int*> temp3(n);
         for (int* &ptr : temp3) ptr = nullptr; // all prev start as nullptr
         prev_verts = temp3;
@@ -51,7 +52,7 @@ class Graph {
         return adj_list;
     }
 
-    vector<int> get_distances() const {
+    vector<double> get_distances() const {
         return distances;
     }
 
@@ -63,7 +64,7 @@ class Graph {
         return n;
     }
 
-    const unordered_map<int, double> get_vertex(int v)  { return adj_list[v]; }
+    const unordered_map<int, double> get_vertex(int v) { return adj_list[v]; }
 
     int* get_prev_index(int v) const { return prev_verts[v]; }
 
@@ -79,6 +80,10 @@ class Graph {
         
         return edge_weight(j,i);
         
+    }
+
+    void add_seen_vertex(int v) {
+        seen_vertices.insert(v);
     }
 
     void initialize_adjacency_list (int dimension) {
