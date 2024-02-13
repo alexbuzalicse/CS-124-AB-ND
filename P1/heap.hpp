@@ -82,9 +82,9 @@ class Heap {
         }
     }
 
-    pair<int, int> pop() {
+    pair<double, int> pop() {
         int n = heap.size();
-        pair<int, int> min = heap[0];
+        pair<double, int> min = heap[0];
 
         heap[0] = heap[n-1];
         heap.pop_back();

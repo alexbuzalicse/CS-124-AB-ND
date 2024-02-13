@@ -56,6 +56,14 @@ class Graph {
         return distances;
     }
 
+    double get_distance(int v) const {
+        return distances[v];
+    }
+
+    void set_distance(int vert, double dist) {
+        distances[vert] = dist;
+    }
+
     bool seen_vertex(int v) const {
         return seen_vertices.find(v) != seen_vertices.end();
     }
@@ -64,7 +72,7 @@ class Graph {
         return n;
     }
 
-    const unordered_map<int, double> get_vertex(int v) { return adj_list[v]; }
+    unordered_map<int, double>& get_vertex(int v) { return adj_list[v]; }
 
     int* get_prev_index(int v) const { return prev_verts[v]; }
 

@@ -29,8 +29,15 @@ void run_prim(Graph &graph, Heap &heap) {
         heap.pop();
         graph.add_seen_vertex(u_ind);
 
-        for (unordered_map<int, double> &weight : graph.get_vertex(u_ind)) {
+        for (const auto &[out_vertex, weight] : graph.get_vertex(u_ind)) {
+            if (graph.seen_vertex(out_vertex)) continue;
 
+            if (graph.get_distance(out_vertex) > weight) {
+                // change the value of this weight to be 
+                graph.set_distance(out_vertex, weight);
+                // NEED TO CHANGE PREV FROM POINTERS TO ACTUAL INTS
+                // NEED TO FIND A WAY TO KEEP TRACK OF VERTEX POSITIONS IN HEAP!
+            } 
         }
         
 
