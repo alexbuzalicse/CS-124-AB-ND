@@ -3,6 +3,7 @@
 #include <random>
 #include <vector>
 #include <set>
+#include <unordered_map>
 
 using std::vector;
 using std::set;
@@ -11,6 +12,7 @@ using std::endl;
 using std::default_random_engine;
 using std::uniform_real_distribution;
 using std::stoi;
+using std::unordered_map;
 
 default_random_engine generator;
 uniform_real_distribution<double> uniformDistribution(0.0,1.0);
@@ -18,23 +20,25 @@ uniform_real_distribution<double> uniformDistribution(0.0,1.0);
 class Graph {
     private:
     int n;
-    vector<vector<pair<int, int>>> adj_list;
+    unordered_map<int, unordered_map<int, double>> adj_list;
     set<int> seen_vertices;
     vector<int> distances;
+    vector<int*> prev_verts;
 
     public:
     
     Graph() {}
     
     Graph (int n) : n(n) {
-        vector<vector<pair<int, int>>> temp(n);
-        adj_list = temp;
         vector<int> temp2(n);
         distances = temp2;
+        vector<int*> temp3(n);
+        for (int* &ptr : temp3) ptr = nullptr; // all prev start as nullptr
+        prev_verts = temp3;
     }
     ~Graph () {}
 
-    vector<vector<pair<int, int>>> get_adj_list() const {
+    unordered_map<int, unordered_map<int, double>> get_adj_list() const {
         return adj_list;
     }
 
@@ -50,7 +54,15 @@ class Graph {
         return n;
     }
 
-    vector<pair<int, int>> get_vertex(int v) const { return adj_list[v]; }
+    const unordered_map<int, double> get_vertex(int v)  { return adj_list[v]; }
+
+    int* get_prev_index(int v) const { return prev_verts[v]; }
+
+    double edge_weight(int i, int j)  {
+        if (!adj_list[i].size()) return 0;
+        if (adj_list[i].find(j) == adj_list[i].end()) return 0;
+        return adj_list[i][j];
+    }
 };
 
 
