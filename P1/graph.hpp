@@ -18,7 +18,7 @@ uniform_real_distribution<double> uniformDistribution(0.0,1.0);
 class Graph {
     private:
     int n;
-    vector<vector<int>> adj_list;
+    vector<vector<pair<int, int>>> adj_list;
     set<int> seen_vertices;
     vector<int> distances;
 
@@ -27,14 +27,14 @@ class Graph {
     Graph() {}
     
     Graph (int n) : n(n) {
-        vector<vector<int>> temp(n);
+        vector<vector<pair<int, int>>> temp(n);
         adj_list = temp;
         vector<int> temp2(n);
         distances = temp2;
     }
     ~Graph () {}
 
-    vector<vector<int>> get_adj_list() const {
+    vector<vector<pair<int, int>>> get_adj_list() const {
         return adj_list;
     }
 
@@ -42,9 +42,15 @@ class Graph {
         return distances;
     }
 
+    bool seen_vertex(int v) const {
+        return seen_vertices.find(v) != seen_vertices.end();
+    }
+
     int get_size() const {
         return n;
     }
+
+    vector<pair<int, int>> get_vertex(int v) const { return adj_list[v]; }
 };
 
 
