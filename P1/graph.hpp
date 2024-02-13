@@ -2,8 +2,10 @@
 #include <sstream>
 #include <random>
 #include <vector>
+#include <set>
 
 using std::vector;
+using std::set;
 using std::cout;
 using std::endl;
 using std::default_random_engine;
@@ -12,6 +14,26 @@ using std::stoi;
 
 default_random_engine generator;
 uniform_real_distribution<double> uniformDistribution(0.0,1.0);
+
+class Graph {
+    private:
+    int n;
+    vector<vector<int>> adj_list;
+    set<int> seen_vertices;
+    vector<int> distances;
+
+
+    public:
+    
+    Graph() {}
+    
+    Graph (int n) {
+        vector<vector<int>> adj_list(n);
+        vector<int> distance(n);
+    }
+    ~Graph () {}
+};
+
 
 double euclideanDistance(const vector<double> &x, const vector<double> &y) {
     double sum = 0;

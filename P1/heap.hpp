@@ -93,6 +93,8 @@ class Heap {
         return min;
     }
 
+    bool empty() const { return heap.size() == 0; }
+
     // let us index a Heap object outside of the class def
     pair<int, int>& operator[](int index) { return heap[index]; }
 

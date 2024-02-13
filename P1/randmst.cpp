@@ -11,15 +11,7 @@ double mstSum(vector<vector<int>> mstEdges, vector<vector<double>> adjacencyMatr
     return sum;
 }
 
-int main(int argc, char* argv[])
-{
-    // Get command line arguments
-    int flexibleFlag = stoi(argv[1]);
-    int n = stoi(argv[2]);
-    int m = 65536;
-    int trials = stoi(argv[3]);
-    int dimension = stoi(argv[4]);
-
+void tester_func(int dimension, int n) {
     // Generate adjacency matrix
     vector<vector<double>> adjacencyMatrix = getAdjacencyMatrix(dimension, n);
 
@@ -70,5 +62,26 @@ int main(int argc, char* argv[])
             cout << "(" << prev[i] << ", " << i << ") \n";
         }
     }
+
+}
+
+void graph_tester() {
+    Graph g(50);
+}
+
+int main(int argc, char* argv[])
+{
+    if (argc > 1)  {
+        // Get command line arguments
+        int flexibleFlag = stoi(argv[1]);
+        int n = stoi(argv[2]);
+        int m = 65536;
+        int trials = stoi(argv[3]);
+        int dimension = stoi(argv[4]);
+        tester_func(dimension, n);
+    }  
+
+    graph_tester();
+
     return 0;
 }
