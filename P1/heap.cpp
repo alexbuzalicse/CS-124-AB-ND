@@ -10,11 +10,6 @@ using std::numeric_limits;
 
 float inf = numeric_limits<float>::infinity();
 
-vector<int> createHeap();
-void printHeap(vector<int> heap);
-void heapInsert(vector<int> &heap, vector<float> d, int v);
-int deleteMin(vector<int> &heap, vector<float> d);
-
 vector<int> createHeap() {
     return vector<int>{};
 }
@@ -38,18 +33,22 @@ void printHeap(vector<int> heap) {
     cout << "\n";
 }
 
-void heapInsert(vector<int> &heap, vector<float> d, int v) {
+void heapInsert(vector<int> &heap, vector<float> d, int v, vector<int> &verticesInHeap) {
 
     heap.push_back(v);
     int N = heap.size() - 1;
 
+    verticesInHeap[v] = N;
+
     while (N != 0 && d[heap[parent(N)]] > d[heap[N]]) {
         swap(heap[parent(N)], heap[N]);
+        swap(verticesInHeap[parent(N)], verticesInHeap[N]);
         N = parent(N);
     }
+
 }
 
-void minHeapify(vector<int> &heap, vector<float> d, int N) {
+void minHeapify(vector<int> &heap, vector<float> d, int N, vector<int> &verticesInHeap) {
 
     int l = left(N);
     int r = right(N);
@@ -68,17 +67,27 @@ void minHeapify(vector<int> &heap, vector<float> d, int N) {
     }
 
     if (smallest != N) {
-        swap(heap[N],heap[smallest]);
-        minHeapify(heap, d, smallest);
+        swap(heap[N], heap[smallest]);
+        swap(verticesInHeap[N], verticesInHeap[smallest]);
+        minHeapify(heap, d, smallest, verticesInHeap);
     }
 }
 
-int deleteMin(vector<int> &heap, vector<float> d) {
+int deleteMin(vector<int> &heap, vector<float> d, vector<int> &verticesInHeap) {
 
     int min = heap[0];
     heap[0] = heap[heap.size() - 1];
+
+    // Update vertex positions in heap
+    verticesInHeap[min] = -1;
+    for (int i = 0; i < verticesInHeap.size(); i++) {
+        if (verticesInHeap[i] >= 0) {
+            verticesInHeap[i] -= 1;
+        } 
+    }
+
     heap.resize(heap.size() - 1);
-    minHeapify(heap, d, 0);
+    minHeapify(heap, d, 0, verticesInHeap);
 
     return min;
 }
