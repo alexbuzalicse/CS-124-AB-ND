@@ -20,15 +20,17 @@ void run_prim(Graph &graph, Heap &heap) {
     // prev_vertex[i] is the previous vertex id for vertex i
 }
 
-double sum_edges(const Graph &graph) {
-    double sum = 0;
+double sum_edges(Graph &graph) {
+    double total = 0;
     int n = graph.get_size();
     
     for (int i = 0; i < n; ++i) {
         int* prev = graph.get_prev_index(i);
         if (!prev) continue;
         // want to add the weight of the edge from *prev to i
+        total += graph.edge_weight(*prev, i);
     }
+    return total;
 }
 
 double prim_MST(int n) {
