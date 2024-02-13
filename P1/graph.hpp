@@ -42,10 +42,6 @@ class Graph {
         return distances;
     }
 
-    void dist_tester() {
-        distances[1] = 1;
-    }
-
     int get_size() const {
         return n;
     }
