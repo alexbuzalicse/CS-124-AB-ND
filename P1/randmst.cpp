@@ -67,7 +67,8 @@ void tester_func(int dimension, int n) {
 
 void graph_tester() {
     Graph g(50);
-    cout << g.get_adj_list().size() << endl;
+    // vector<int> adj = g.get_adj_list();
+    // cout << "list size is " << adj.size() << endl;
 }
 
 int main(int argc, char* argv[])
