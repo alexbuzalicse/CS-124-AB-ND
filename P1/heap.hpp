@@ -47,7 +47,7 @@ class Heap {
         }
     }
 
-    void print() {
+    void print() const {
         for (const pair<int, int> &p : heap) {
             cout << p.first << " ";
         }
@@ -70,7 +70,7 @@ class Heap {
         }
     }
 
-    pair<int, int> top() { return heap[0]; }
+    pair<int, int> top() const { return heap[0]; }
 
     void push(pair<int, int> &new_pair) {
         heap.push_back(new_pair);
