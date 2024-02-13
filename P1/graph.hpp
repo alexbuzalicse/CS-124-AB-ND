@@ -59,9 +59,27 @@ class Graph {
     int* get_prev_index(int v) const { return prev_verts[v]; }
 
     double edge_weight(int i, int j)  {
-        if (!adj_list[i].size()) return 0;
-        if (adj_list[i].find(j) == adj_list[i].end()) return 0;
-        return adj_list[i][j];
+        // if (!adj_list[i].size()) return 0;
+        // if (adj_list[i].find(j) == adj_list[i].end()) return 0;
+        if (i == j) return 0;
+        if (i < j) {return adj_list[i][j];}
+        
+        return adj_list[j][i];
+        
+    }
+
+    void initialize_adjacency_list (int dimension) {
+
+        // Random edge weight (dimension = 0)
+        if (dimension == 0) {
+            for (int i = 0; i < n; i++) {
+                for(int j = i+1; j < n; j++) {
+                    adj_list[i][j] = uniformDistribution(generator);
+                }
+            }
+        }
+
+        
     }
 };
 

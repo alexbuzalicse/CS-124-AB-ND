@@ -70,20 +70,27 @@ void graph_tester() {
     cout << g.get_adj_list().size() << endl;
 }
 
-
 int main(int argc, char* argv[])
 {
+    int n;
     if (argc > 1)  {
         // Get command line arguments
         int flexibleFlag = stoi(argv[1]);
-        int n = stoi(argv[2]);
+        n = stoi(argv[2]);
         int m = 65536;
         int trials = stoi(argv[3]);
         int dimension = stoi(argv[4]);
-        tester_func(dimension, n);
+        // tester_func(dimension, n);
     }  
 
-    graph_tester();
+    Graph g(n);
+    g.initialize_adjacency_list(0);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cout << g.edge_weight(i,j) << " ";
+        }
+        cout << "\n";
+    }
 
     cout << "success!" << endl;
 
