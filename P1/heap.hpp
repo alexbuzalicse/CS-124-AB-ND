@@ -7,12 +7,10 @@ using std::vector;
 using std::cout;
 using std::swap;
 using std::numeric_limits;
+using std::pair;
+using std::min;
 
-float inf = numeric_limits<float>::infinity();
-
-vector<int> createHeap() {
-    return vector<int>{};
-}
+double inf = numeric_limits<double>::infinity();
 
 int parent(int v) {
     return floor((v-1)/2);
@@ -26,6 +24,85 @@ int right(int v) {
     return (2*v) + 2;
 }
 
+class Heap {
+    // implicitly a min heap
+    private:
+    // represent the heap with a vector of (dist "d", index of vertex)
+    vector<pair<int, int>> heap;
+
+    public:
+    // default constructor
+    Heap () {}
+
+    // default destructor
+    ~Heap () {}
+
+    Heap (vector<pair<int, int>> &heap) : heap(heap) {
+        buildHeap();
+    }
+
+    void buildHeap() {
+        for (int i = heap.size() / 2; i >= 0; --i) {
+            this->minHeapify(i);
+        }
+    }
+
+    void print() {
+        for (const pair<int, int> &p : heap) {
+            cout << p.first << " ";
+        }
+        cout << endl;
+    }
+
+    void minHeapify(int n) {
+        int l = left(n), r = right(n);
+        int smallest;
+
+        if (l >= 0 && heap[l].first < heap[n].first) smallest = l;
+        else smallest = n;
+        if (r < heap.size() && heap[r].first < heap[n].first) smallest = r;
+
+        if (smallest != n) {
+            int temp = heap[n].first;
+            heap[n].first = heap[smallest].first;
+            heap[smallest].first = temp;
+            this->minHeapify(smallest);
+        }
+    }
+
+    pair<int, int> top() { return heap[0]; }
+
+    void push(pair<int, int> &new_pair) {
+        heap.push_back(new_pair);
+        int n = heap.size() - 1;
+
+        while (n > 0 && heap[parent(n)] > heap[n]) {
+            swap(heap[parent(n)], heap[n]);
+            n = parent(n);
+        }
+    }
+
+    pair<int, int> pop() {
+        int n = heap.size();
+        pair<int, int> min = heap[0];
+
+        heap[0] = heap[n-1];
+        heap.pop_back();
+        this->minHeapify(0);
+
+        return min;
+    }
+
+    // let us index a Heap object outside of the class def
+    pair<int, int>& operator[](int index) { return heap[index]; }
+
+};
+
+
+vector<int> createHeap() {
+    return vector<int>{};
+}
+
 void printHeap(vector<int> heap) {
     for (int i = 0; i < heap.size(); i++) {
         cout << heap[i] << " ";
@@ -33,7 +110,8 @@ void printHeap(vector<int> heap) {
     cout << "\n";
 }
 
-void heapInsert(vector<int> &heap, vector<float> d, int v, vector<int> &verticesInHeap) {
+
+void heapInsert(vector<int> &heap, vector<double> d, int v, vector<int> &verticesInHeap) {
 
     heap.push_back(v);
     int N = heap.size() - 1;
@@ -48,7 +126,7 @@ void heapInsert(vector<int> &heap, vector<float> d, int v, vector<int> &vertices
 
 }
 
-void minHeapify(vector<int> &heap, vector<float> d, int N, vector<int> &verticesInHeap) {
+void minHeapify(vector<int> &heap, vector<double> d, int N, vector<int> &verticesInHeap) {
 
     int l = left(N);
     int r = right(N);
@@ -73,7 +151,7 @@ void minHeapify(vector<int> &heap, vector<float> d, int N, vector<int> &vertices
     }
 }
 
-int deleteMin(vector<int> &heap, vector<float> d, vector<int> &verticesInHeap) {
+int deleteMin(vector<int> &heap, vector<double> d, vector<int> &verticesInHeap) {
 
     int min = heap[0];
     heap[0] = heap[heap.size() - 1];
