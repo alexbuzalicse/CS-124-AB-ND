@@ -67,7 +67,9 @@ void tester_func(int dimension, int n) {
 
 void graph_tester() {
     Graph g(50);
+    cout << g.get_adj_list().size() << endl;
 }
+
 
 int main(int argc, char* argv[])
 {
@@ -82,6 +84,8 @@ int main(int argc, char* argv[])
     }  
 
     graph_tester();
+
+    cout << "success!" << endl;
 
     return 0;
 }

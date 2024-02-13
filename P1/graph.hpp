@@ -22,16 +22,33 @@ class Graph {
     set<int> seen_vertices;
     vector<int> distances;
 
-
     public:
     
     Graph() {}
     
-    Graph (int n) {
-        vector<vector<int>> adj_list(n);
-        vector<int> distance(n);
+    Graph (int n) : n(n) {
+        vector<vector<int>> temp(n);
+        adj_list = temp;
+        vector<int> temp2(n);
+        distances = temp2;
     }
     ~Graph () {}
+
+    vector<vector<int>> get_adj_list() const {
+        return adj_list;
+    }
+
+    vector<int> get_distances() const {
+        return distances;
+    }
+
+    void dist_tester() {
+        distances[1] = 1;
+    }
+
+    int get_size() const {
+        return n;
+    }
 };
 
 
