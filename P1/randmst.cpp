@@ -1,5 +1,5 @@
-#include "graph.cpp"
-#include "heap.cpp"
+#include "graph.hpp"
+#include "heap.hpp"
 
 float mstSum(vector<vector<int>> mstEdges, vector<vector<double>> adjacencyMatrix) {
     
