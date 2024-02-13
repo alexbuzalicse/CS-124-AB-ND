@@ -29,6 +29,9 @@ class Heap {
     private:
     // represent the heap with a vector of (dist "d", index of vertex)
     vector<pair<double, int>> heap;
+    
+    // Keep track of where in heap each vertex is, -1 if not in heap
+    vector<int> heapVertexPositions;
 
     public:
     // default constructor
@@ -45,6 +48,14 @@ class Heap {
         for (int i = heap.size() / 2; i >= 0; --i) {
             this->minHeapify(i);
         }
+    }
+
+    void initializeVertexPositions(int n) {
+        heapVertexPositions = vector<int> (n,-1);
+    }
+
+    int getHeapVertexPosition(int i) {
+        return heapVertexPositions[i];
     }
 
     void print() const {
@@ -66,6 +77,7 @@ class Heap {
             int temp = heap[n].first;
             heap[n].first = heap[smallest].first;
             heap[smallest].first = temp;
+            swap(heapVertexPositions[n], heapVertexPositions[smallest]);
             this->minHeapify(smallest);
         }
     }
@@ -75,18 +87,28 @@ class Heap {
     void push(const pair<double, int> &new_pair) {
         heap.push_back(new_pair);
         int n = heap.size() - 1;
+        heapVertexPositions[new_pair.second] = n;
 
         while (n > 0 && heap[parent(n)] > heap[n]) {
             swap(heap[parent(n)], heap[n]);
+            swap(heapVertexPositions[parent(n)], heapVertexPositions[n]);
             n = parent(n);
         }
     }
 
-    pair<double, int> pop() {
+    pair<int, int> pop() {
         int n = heap.size();
-        pair<double, int> min = heap[0];
+        pair<int, int> min = heap[0];
 
         heap[0] = heap[n-1];
+
+        heapVertexPositions[min.second] = -1;
+        for (int i = 0; i < heapVertexPositions.size(); i++) {
+            if (heapVertexPositions[i] >= 0) {
+                heapVertexPositions[i] -= 1;
+            } 
+        }
+
         heap.pop_back();
         this->minHeapify(0);
 
