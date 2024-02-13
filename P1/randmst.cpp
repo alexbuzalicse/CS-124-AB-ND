@@ -74,18 +74,19 @@ void graph_tester() {
 int main(int argc, char* argv[])
 {
     int n;
+    int dimension;
     if (argc > 1)  {
         // Get command line arguments
         int flexibleFlag = stoi(argv[1]);
         n = stoi(argv[2]);
         int m = 65536;
         int trials = stoi(argv[3]);
-        int dimension = stoi(argv[4]);
+        dimension = stoi(argv[4]);
         // tester_func(dimension, n);
     }  
 
     Graph g(n);
-    g.initialize_adjacency_list(0);
+    g.initialize_adjacency_list(dimension);
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             cout << g.edge_weight(i,j) << " ";

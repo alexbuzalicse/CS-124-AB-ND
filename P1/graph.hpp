@@ -9,13 +9,22 @@ using std::vector;
 using std::set;
 using std::cout;
 using std::endl;
-using std::default_random_engine;
 using std::uniform_real_distribution;
 using std::stoi;
 using std::unordered_map;
 
-default_random_engine generator;
+std::random_device rd;
+std::mt19937 generator(rd());
 uniform_real_distribution<double> uniformDistribution(0.0,1.0);
+
+double euclideanDistance(const vector<double> &x, const vector<double> &y) {
+    double sum = 0;
+    assert (x.size() == y.size());
+    for (int i = 0; i < x.size(); i++) {
+        sum += (x[i]-y[i])*(x[i]-y[i]);
+    }
+    return sqrt(sum);
+}
 
 class Graph {
     private:
@@ -59,12 +68,16 @@ class Graph {
     int* get_prev_index(int v) const { return prev_verts[v]; }
 
     double edge_weight(int i, int j) {
-        // if (!adj_list[i].size()) return 0;
-        // if (adj_list[i].find(j) == adj_list[i].end()) return 0;
+
         if (i == j) return 0;
-        if (i < j) {return adj_list[i][j];}
+
+        if (i < j) {
+            if (!adj_list[i].size()) return 0;
+            if (adj_list[i].find(j) == adj_list[i].end()) return 0;
+            return adj_list[i][j];
+        }
         
-        return adj_list[j][i];
+        return edge_weight(j,i);
         
     }
 
@@ -78,18 +91,27 @@ class Graph {
                 }
             }
         }
+
+        else {
+
+            // Generate vertices, each row is a vertex with a point in (dimension) dimensions
+            vector<vector<double>> vertices (n, vector<double>(dimension));
+            for(int i = 0; i < n; i++) {
+                for(int j = 0; j < dimension; j++) {
+                    vertices[i][j] = uniformDistribution(generator);
+                }
+            }
+            
+            // Generate adjacency list
+            for (int i = 0; i < n; i++) {
+                for (int j = i+1; j < n; j++) {
+                    adj_list[i][j] = euclideanDistance(vertices[i], vertices[j]);
+                }
+            }
+        }
+
     }
 };
-
-
-double euclideanDistance(const vector<double> &x, const vector<double> &y) {
-    double sum = 0;
-    assert (x.size() == y.size());
-    for (int i = 0; i < x.size(); i++) {
-        sum += (x[i]-y[i])*(x[i]-y[i]);
-    }
-    return sqrt(sum);
-}
 
 vector<vector<double>> getAdjacencyMatrix(int dimension, int n) {
 
@@ -137,3 +159,4 @@ void printMatrix(vector<vector<double>> matrix) {
         cout << "\n";
     }
 }
+
