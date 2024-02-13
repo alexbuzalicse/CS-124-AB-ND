@@ -38,7 +38,7 @@ class Heap {
     ~Heap () {}
 
     Heap (vector<pair<int, int>> &heap) : heap(heap) {
-        buildHeap();
+        this->buildHeap();
     }
 
     void buildHeap() {
