@@ -16,6 +16,7 @@ using std::stoi;
 
 void run_prim(Graph &graph, Heap &heap) {
     int n = graph.get_size();
+    vector<int*> prev_edges(n);
     // prev_vertex[i] is the previous vertex id for vertex i
 }
 
