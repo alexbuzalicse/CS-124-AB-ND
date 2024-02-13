@@ -58,7 +58,7 @@ class Graph {
 
     int* get_prev_index(int v) const { return prev_verts[v]; }
 
-    double edge_weight(int i, int j)  {
+    double edge_weight(int i, int j) {
         if (!adj_list[i].size()) return 0;
         if (adj_list[i].find(j) == adj_list[i].end()) return 0;
         return adj_list[i][j];
