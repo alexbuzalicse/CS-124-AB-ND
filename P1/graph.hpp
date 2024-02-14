@@ -32,7 +32,7 @@ class Graph {
     unordered_map<int, unordered_map<int, double>> adj_list;
     set<int> seen_vertices;
     vector<double> distances;
-    vector<int*> prev_verts;
+    vector<int> prev_verts;
 
     public:
     
@@ -42,8 +42,7 @@ class Graph {
         vector<double> temp2(n, __DBL_MAX__);
         distances = temp2;
         distances[0] = 0.0;
-        vector<int*> temp3(n);
-        for (int* &ptr : temp3) ptr = nullptr; // all prev start as nullptr
+        vector<int> temp3(n, -1);
         prev_verts = temp3;
     }
     ~Graph () {}
@@ -74,7 +73,9 @@ class Graph {
 
     unordered_map<int, double>& get_vertex(int v) { return adj_list[v]; }
 
-    int* get_prev_index(int v) const { return prev_verts[v]; }
+    int get_prev_index(int v) const { return prev_verts[v]; }
+
+    void set_prev(int i, int j) { prev_verts[i] = j; }
 
     double edge_weight(int i, int j) {
 

@@ -44,6 +44,11 @@ class Heap {
         this->buildHeap();
     }
 
+    Heap (int n) {
+        vector<int> temp(n, -1);
+        heapVertexPositions = temp;
+    }
+
     void buildHeap() {
         for (int i = heap.size() / 2; i >= 0; --i) {
             this->minHeapify(i);
@@ -63,6 +68,11 @@ class Heap {
             cout << p.first << " ";
         }
         cout << endl;
+    }
+
+    void set_key(int loc, double dist) {
+        heap[loc].first = dist;
+        this->minHeapify(loc); // preserve heap structure
     }
 
     void minHeapify(int n) {

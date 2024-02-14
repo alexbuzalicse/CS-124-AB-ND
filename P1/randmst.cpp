@@ -1,7 +1,7 @@
 #include "graph.hpp"
 #include "heap.hpp"
 
-double mstSum(vector<vector<int>> mstEdges, vector<vector<double>> adjacencyMatrix) {
+double mstSum(const vector<vector<int>> &mstEdges, const vector<vector<double>> &adjacencyMatrix) {
     
     double sum = 0;
 
