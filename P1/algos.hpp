@@ -23,7 +23,7 @@ void run_prim(Graph &graph, Heap &heap) {
     while (!heap.empty()) {
         pair<double, int> u_pair = heap.top();
         double dist = u_pair.first;
-        double u_ind = u_pair.second;
+        int u_ind = u_pair.second;
 
         heap.pop();
         graph.add_seen_vertex(u_ind);
