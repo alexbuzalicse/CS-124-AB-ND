@@ -127,6 +127,7 @@ class Heap {
     }
 
     pair<int, int> pop() {
+
         int n = heap.size();
         pair<int, int> min = heap[0];
 

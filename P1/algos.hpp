@@ -21,31 +21,38 @@ void run_prim(Graph &graph, Heap &heap) {
     heap.push({0,0});
 
     while (!heap.empty()) {
-        
-        // Printing for testing
-        cout << "New Iteration\nHeap: ";
-        heap.print(true);
-        cout << "\nVertex Positions: ";
-        for (int i = 0; i < graph.get_size(); i++) {cout << heap.getHeapVertexPosition(i) << " ";}
-        cout <<"\n";
 
-        pair<double, int> u_pair = heap.top();
+        pair<double, int> u_pair = heap.pop();
         double dist = u_pair.first;
         int u_ind = u_pair.second;
 
-        heap.pop();
         graph.add_seen_vertex(u_ind);
-
-        // Printing for testing
-        cout << "Heap After Popping: ";
-        heap.print(true);
-        cout << "Vertex Positions After Popping: ";
-        for (int i = 0; i < graph.get_size(); i++) {cout << heap.getHeapVertexPosition(i) << " ";}
 
         // THOUGHTS: the "selective" implementation for the weights could be
         // easy with this code if we just leave the non-used edges blank
-        for (auto &[out_vertex, weight] : graph.get_vertex(u_ind)) {
+        // for (auto &[out_vertex, weight] : graph.get_vertex(u_ind)) {
+        //     cout << out_vertex << ", ";
+        //     if (graph.seen_vertex(out_vertex)) continue;
+        //     if (graph.get_distance(out_vertex) > weight) {
+        //         graph.set_distance(out_vertex, weight);
+        //         graph.set_prev(out_vertex, u_ind);
+
+        //         // now either insert or change into the heap
+        //         int heap_pos = heap.getHeapVertexPosition(out_vertex);
+        //         if (heap_pos == -1) heap.push({weight, out_vertex});
+        //         else heap.set_key(heap_pos, weight);
+                
+        //     } // if 
+        // } // for
+        for (int out_vertex = 0; out_vertex < n; out_vertex++) {
+            
+            if (out_vertex == u_ind) continue;
+
+            double weight = graph.edge_weight(u_ind, out_vertex);
+            if (weight == 0) continue; // If edge doesn't exist
+
             if (graph.seen_vertex(out_vertex)) continue;
+    
             if (graph.get_distance(out_vertex) > weight) {
                 graph.set_distance(out_vertex, weight);
                 graph.set_prev(out_vertex, u_ind);
@@ -57,7 +64,6 @@ void run_prim(Graph &graph, Heap &heap) {
                 
             } // if 
         } // for
-        cout << "\n\n"; // For testing
     } // while
 } // run_prim
 
