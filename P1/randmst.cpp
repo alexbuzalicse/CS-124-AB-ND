@@ -1,5 +1,4 @@
-#include "graph.hpp"
-#include "heap.hpp"
+#include "algos.hpp"
 
 double mstSum(const vector<vector<int>> &mstEdges, const vector<vector<double>> &adjacencyMatrix) {
     
@@ -9,60 +8,6 @@ double mstSum(const vector<vector<int>> &mstEdges, const vector<vector<double>> 
         sum += adjacencyMatrix[mstEdges[i][0]][mstEdges[i][1]];
     }
     return sum;
-}
-
-void tester_func(int dimension, int n) {
-    // Generate adjacency matrix
-    vector<vector<double>> adjacencyMatrix = getAdjacencyMatrix(dimension, n);
-
-    // Prim
-    vector<int> heap = createHeap();
-    vector<double> d (n, inf);
-    vector<int> S (n, 0);
-    vector<int> prev (n,0);
-    vector<int> verticesInHeap (n, -1);
-
-    int start = 1;
-    heapInsert(heap, d, start, verticesInHeap);
-
-    while (heap.size() != 0) {
-        printHeap(heap);
-        for (int k = 0; k < n; k++) {cout << S[k] << " ";}
-        cout << "\n";
-        for (int k = 0; k < n; k++) {cout << verticesInHeap[k] << " ";}
-        cout << "\n\n";
-
-        int u = deleteMin(heap, d, verticesInHeap);
-        S[u] = 1;
-
-        for (int v = 0; v < n; v++) {
-            
-            if (v != u && S[v] == 0) {
-
-                double w = adjacencyMatrix[u][v];
-                if (d[v] > w) {
-                    
-                    d[v] = w;
-                    prev[v] = u;
-                    
-                    if (verticesInHeap[v] < 0) {
-                        heapInsert(heap, d, v, verticesInHeap); 
-                    }
-                    else {
-                        heap.erase(heap.begin() + verticesInHeap[v]);
-                        heapInsert(heap, d, v, verticesInHeap);
-                    } 
-                }
-            }
-        }
-    }
-    
-    for (int i = 0; i < n; i++) {
-        if (i!= start) {
-            cout << "(" << prev[i] << ", " << i << ") \n";
-        }
-    }
-
 }
 
 void graph_tester() {
@@ -86,15 +31,16 @@ int main(int argc, char* argv[])
     }  
 
     Graph g(n);
-    g.initialize_adjacency_list(dimension);
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            cout << g.edge_weight(i,j) << " ";
-        }
-        cout << "\n";
-    }
-
-    cout << "success!" << endl;
+    g.insert_custom_edge(0, 1, 1);
+    g.insert_custom_edge(1, 2, 2);
+    g.insert_custom_edge(2, 3, 3);
+    g.insert_custom_edge(0, 3, 4);
+    g.insert_custom_edge(0, 2, 5);
+    g.insert_custom_edge(1,3, 6);
+    
+    Heap heap = Heap(4);
+    run_prim(g, heap);
+    cout << sum_edges(g);
 
     return 0;
 }

@@ -123,54 +123,11 @@ class Graph {
                 }
             }
         }
-
     }
+
+    // FOR TESTING ONLY, DELETE LATER
+    void insert_custom_edge(int i, int j, double weight) {
+        adj_list[i][j] = weight;
+    }
+
 };
-
-vector<vector<double>> getAdjacencyMatrix(int dimension, int n) {
-
-    vector<vector<double>> adjacencyMatrix (n, vector<double>(n));
-
-    // Random edge weight (dimension = 0)
-    if (dimension == 0) {
-
-        for (int i = 0; i < n; i++) {
-            for(int j = i; j < n; j++) {
-                adjacencyMatrix[i][j] = uniformDistribution(generator);
-                adjacencyMatrix[j][i] = adjacencyMatrix[i][j];
-            }
-        }
-    }
-
-    else {
-
-        vector<vector<double>> graph (n, vector<double>(dimension));
-
-        // Generate graph, each row is a vertex with a point in (dimension) dimensions
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < dimension; j++) {
-                graph[i][j] = uniformDistribution(generator);
-            }
-        }
-
-        // Get adjacency matrix
-        for (int i = 0; i < n; i++) {
-            for(int j = 0; j < n; j++) {
-                adjacencyMatrix[i][j] = euclideanDistance(graph[i], graph[j]);
-            }
-        }
-    }
-
-    return adjacencyMatrix;
-}
-
-void printMatrix(vector<vector<double>> matrix) {
-
-    for (int i = 0; i < matrix.size(); i++) {
-        for (int j = 0 ; j < matrix[0].size(); j++) {
-            cout << matrix[i][j] << " ";
-        }
-        cout << "\n";
-    }
-}
-
