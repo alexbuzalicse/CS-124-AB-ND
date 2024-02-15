@@ -15,14 +15,17 @@ int main(int argc, char* argv[])
         dimension = stoi(argv[4]);
     }  
 
-    double sum = 0;
-    cout << "Individual Trials: ";
+    double mstAverage = 0;
+    double maxEdgeAverage = 0;
+    cout << "Individual Trials\n";
     for (int i = 0; i < trials; i++) {
-        double mstSum = prim_MST(n, dimension);
-        sum += mstSum;
-        cout << mstSum << " ";
+        auto [mstSum, maxEdge] = prim_MST(n, dimension);
+        mstAverage += mstSum;
+        maxEdgeAverage += maxEdge;
+        cout << "Tree Weight: " << mstSum << ", " << "Max Edge: " << maxEdge << "\n";
     }
-    cout << "\nAverage: " << sum/trials;
+    cout << "\nAverage MST Weight: " << mstAverage/trials << "\n";
+    cout << "\nAverage Max Edge: " << maxEdgeAverage/trials << "\n";
 
     return 0;
 }

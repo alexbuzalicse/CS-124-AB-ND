@@ -79,15 +79,9 @@ class Graph {
 
     double edge_weight(int i, int j) {
 
-        if (i == j) return 0;
-
-        if (i < j) {
-            if (!adj_list[i].size()) return 0;
-            if (adj_list[i].find(j) == adj_list[i].end()) return 0;
-            return adj_list[i][j];
-        }
-        
-        return edge_weight(j,i);
+        if (!adj_list[i].size()) return 0;
+        if (adj_list[i].find(j) == adj_list[i].end()) return 0;
+        return adj_list[i][j];
         
     }
 
@@ -101,7 +95,11 @@ class Graph {
         if (dimension == 0) {
             for (int i = 0; i < n; i++) {
                 for(int j = i+1; j < n; j++) {
-                    adj_list[i][j] = uniformDistribution(generator);
+                    double potentialEdge = uniformDistribution(generator);
+                    if (!edge_exclusion(n, dimension, potentialEdge)) {
+                        adj_list[i][j] = potentialEdge;
+                        adj_list[j][i] = potentialEdge; // MAYBE KEEP THIS
+                    }
                 }
             }
         }
@@ -123,6 +121,14 @@ class Graph {
                 }
             }
         }
+    }
+
+    // Return true if we want to exclude the edge
+    bool edge_exclusion(int n, int dimension, double edge) {
+        if (dimension == 0) {
+            return edge > (128.0/n * .05);
+        }
+        return false;
     }
 
     // FOR TESTING ONLY, DELETE LATER
