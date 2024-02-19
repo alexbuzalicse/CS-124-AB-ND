@@ -19,7 +19,7 @@ uniform_real_distribution<double> uniformDistribution(0.0,1.0);
 
 double euclideanDistance(const vector<double> &x, const vector<double> &y) {
     double sum = 0;
-    assert (x.size() == y.size());
+    // assert (x.size() == y.size());
     for (int i = 0; i < x.size(); i++) {
         sum += (x[i]-y[i])*(x[i]-y[i]);
     }

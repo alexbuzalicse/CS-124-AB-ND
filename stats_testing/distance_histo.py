@@ -36,8 +36,11 @@ def main():
     for i in range(2):
         for j in range(2):
             ax[i][j].hist(dists[coord],bins=50)
-            ax[i][j].set_title(f"{dims[coord]}")
             perc = np.percentile(dists[coord], 1)
+            print(f"perc: {perc}")
+            avg = np.array([dat for dat in dists[coord] if dat <= perc]).mean()
+            print(f"avg: {avg}")
+            ax[i][j].set_title(f"{dims[coord]}, 1%: {perc}\n low avg: {avg}")
             ax[i][j].plot([perc, perc],[0,N/20],"k--")
             coord += 1
 
