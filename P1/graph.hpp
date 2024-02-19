@@ -89,12 +89,11 @@ class Graph {
         seen_vertices.insert(v);
     }
 
-    void initialize_adjacency_list (int dimension) {
-
+    void initialize_adjacency_list(int dimension) {
         // Random edge weight (dimension = 0)
         if (dimension == 0) {
             for (int i = 0; i < n; i++) {
-                for(int j = i+1; j < n; j++) {
+                for (int j = i+1; j < n; j++) {
                     double potentialEdge = uniformDistribution(generator);
                     if (!edge_exclusion(n, dimension, potentialEdge)) {
                         adj_list[i][j] = potentialEdge;
@@ -103,9 +102,7 @@ class Graph {
                 }
             }
         }
-
         else {
-
             // Generate vertices, each row is a vertex with a point in (dimension) dimensions
             vector<vector<double>> vertices (n, vector<double>(dimension));
             for(int i = 0; i < n; i++) {
@@ -113,7 +110,6 @@ class Graph {
                     vertices[i][j] = uniformDistribution(generator);
                 }
             }
-            
             // Generate adjacency list
             for (int i = 0; i < n; i++) {
                 for (int j = i+1; j < n; j++) {
@@ -135,5 +131,4 @@ class Graph {
     void insert_custom_edge(int i, int j, double weight) {
         adj_list[i][j] = weight;
     }
-
 };

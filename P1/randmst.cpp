@@ -2,10 +2,10 @@
 
 int main(int argc, char* argv[])
 {
-    int flexibleFlag;
-    int n;
-    int dimension;
-    int trials;
+    int flexibleFlag = 0; // changing to zero to avoid non-init issues
+    int n = 0;
+    int dimension = 0;
+    int trials = 0;
 
     if (argc > 1)  {
         // Get command line arguments

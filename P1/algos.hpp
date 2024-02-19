@@ -72,6 +72,7 @@ tuple <double,double> prim_MST(int n, int dimension) {
     Heap heap(n);
 
     // initialize graph weights
+    // TODO - change to only include certain edges!!
     graph.initialize_adjacency_list(dimension);
 
     run_prim(graph, heap);
