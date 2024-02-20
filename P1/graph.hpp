@@ -17,6 +17,13 @@ std::random_device rd;
 std::mt19937 generator(rd());
 uniform_real_distribution<double> uniformDistribution(0.0,1.0);
 
+// empirically found constants
+const double MAX_WEIGHT_0 = 0.01;
+const double MAX_WEIGHT_2 = 0.05;
+const double MAX_WEIGHT_3 = 0.10;
+const double MAX_WEIGHT_4 = 0.23;
+const int HIGH_EDGES = 10000;
+
 double euclideanDistance(const vector<double> &x, const vector<double> &y) {
     double sum = 0;
     // assert (x.size() == y.size());
@@ -24,6 +31,15 @@ double euclideanDistance(const vector<double> &x, const vector<double> &y) {
         sum += (x[i]-y[i])*(x[i]-y[i]);
     }
     return sqrt(sum);
+}
+
+double gen_dist(int dimension) {
+    vector<double> v1(dimension), v2(dimension);
+    for (int i = 0; i < dimension; ++i) {
+        v1[i] = uniformDistribution(generator);
+        v2[i] = uniformDistribution(generator);
+    }
+    return euclideanDistance(v1, v2);
 }
 
 class Graph {
@@ -103,17 +119,26 @@ class Graph {
             }
         }
         else {
-            // Generate vertices, each row is a vertex with a point in (dimension) dimensions
-            vector<vector<double>> vertices (n, vector<double>(dimension));
-            for(int i = 0; i < n; i++) {
-                for(int j = 0; j < dimension; j++) {
-                    vertices[i][j] = uniformDistribution(generator);
-                }
-            }
-            // Generate adjacency list
-            for (int i = 0; i < n; i++) {
-                for (int j = i+1; j < n; j++) {
-                    adj_list[i][j] = euclideanDistance(vertices[i], vertices[j]);
+            // // Generate vertices, each row is a vertex with a point in (dimension) dimensions
+            // vector<vector<double>> vertices (n, vector<double>(dimension));
+            // for(int i = 0; i < n; i++) {
+            //     for(int j = 0; j < dimension; j++) {
+            //         vertices[i][j] = uniformDistribution(generator);
+            //     }
+            // }
+            // // Generate adjacency list 
+            // for (int i = 0; i < n; i++) {
+            //     for (int j = i+1; j < n; j++) {
+            //         adj_list[i][j] = euclideanDistance(vertices[i], vertices[j]);
+            //     }
+            // }
+            for (int i = 0; i < n - 1; ++i) {
+                for (int j = i + 1; j < n; ++j) {
+                    double dist = gen_dist(dimension);
+                    if (!edge_exclusion(n, dimension, dist)) {
+                        adj_list[i][j] = dist;
+                        adj_list[j][i] = dist;
+                    }
                 }
             }
         }
@@ -121,10 +146,27 @@ class Graph {
 
     // Return true if we want to exclude the edge
     bool edge_exclusion(int n, int dimension, double edge) {
-        if (dimension == 0) {
-            return edge > (128.0/n * .05);
+        switch (dimension)
+        {
+        case 0:
+            /* code */
+            return edge > MAX_WEIGHT_0;
+            break;
+        case 2:
+            if (n < HIGH_EDGES) return false;
+            return edge > MAX_WEIGHT_2;
+            break;
+        case 3:
+            if (n < HIGH_EDGES) return false;
+            return edge > MAX_WEIGHT_3;
+            break;
+        case 4:
+            if (n < HIGH_EDGES) return false;
+            return edge > MAX_WEIGHT_4;
+        default:
+            return false;
+            break;
         }
-        return false;
     }
 
     // FOR TESTING ONLY, DELETE LATER
