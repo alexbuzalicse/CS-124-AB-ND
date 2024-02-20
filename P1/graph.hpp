@@ -18,6 +18,7 @@ std::mt19937 generator(rd());
 uniform_real_distribution<double> uniformDistribution(0.0,1.0);
 
 // empirically found constants
+// NEED TO DOUBLE CHECK ANSWER CONSISTENCY WITH PREVIOUS WAY!
 const double MAX_WEIGHT_0 = 0.01;
 const double MAX_WEIGHT_2 = 0.05;
 const double MAX_WEIGHT_3 = 0.10;
