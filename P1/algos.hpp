@@ -71,9 +71,11 @@ tuple <double,double> prim_MST(int n, int dimension) {
     Graph graph(n);
     Heap heap(n);
 
+    double max_edge_weight = graph.max_edge_weight(dimension);
+
     // initialize graph weights
     // TODO - change to only include certain edges!!
-    graph.initialize_adjacency_list(dimension);
+    graph.initialize_adjacency_list(dimension, max_edge_weight);
 
     run_prim(graph, heap);
     return sum_edges(graph);

@@ -183,6 +183,26 @@ class Graph {
     //     }
     // }
 
+    double max_edge_weight(int dimension) {
+
+        if (dimension == 0) {
+            return 8*(pow(n,-1));
+        }
+        if (dimension == 2) {
+            return 2*(pow(n,-.5));
+        }
+        if (dimension == 3) {
+            return 1.5*(pow(n,-1.0/3.0));
+        }
+        if (dimension == 4) {
+            return 1.4*(pow(n,-1.0/4.0));
+        }
+
+        return 1.0;
+
+    }
+
+
     bool edge_exclusion(int n, int dimension, double edge) {
         if (dimension == 0) {
             return edge > (128.0/n * .05);
