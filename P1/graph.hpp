@@ -145,29 +145,11 @@ class Graph {
         }
     }
 
-    // Return true if we want to exclude the edge
     bool edge_exclusion(int n, int dimension, double edge) {
-        switch (dimension)
-        {
-        case 0:
-            /* code */
-            return edge > MAX_WEIGHT_0;
-            break;
-        case 2:
-            if (n < HIGH_EDGES) return false;
-            return edge > MAX_WEIGHT_2;
-            break;
-        case 3:
-            if (n < HIGH_EDGES) return false;
-            return edge > MAX_WEIGHT_3;
-            break;
-        case 4:
-            if (n < HIGH_EDGES) return false;
-            return edge > MAX_WEIGHT_4;
-        default:
-            return false;
-            break;
+        if (dimension == 0) {
+            return edge > (128.0/n * .05);
         }
+        return false;
     }
 
     // FOR TESTING ONLY, DELETE LATER
