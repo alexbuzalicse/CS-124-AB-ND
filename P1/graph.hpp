@@ -18,14 +18,6 @@ std::random_device rd;
 std::mt19937 generator(rd());
 uniform_real_distribution<double> uniformDistribution(0.0,1.0);
 
-// empirically found constants
-// NEED TO DOUBLE CHECK ANSWER CONSISTENCY WITH PREVIOUS WAY!
-const double MAX_WEIGHT_0 = 0.01;
-const double MAX_WEIGHT_2 = 0.05;
-const double MAX_WEIGHT_3 = 0.10;
-const double MAX_WEIGHT_4 = 0.23;
-const int HIGH_EDGES = 10000;
-
 double euclideanDistance(const vector<double> &x, const vector<double> &y) {
     double sum = 0;
     // assert (x.size() == y.size());
@@ -45,6 +37,7 @@ double gen_dist(int dimension) {
 }
 
 class Graph {
+    
     private:
     int n;
     unordered_map<int, unordered_map<int, double>> adj_list;
@@ -108,80 +101,43 @@ class Graph {
     }
 
     void initialize_adjacency_list(int dimension, double max_edge_weight) {
-        // generate points
+        
         if (dimension == 0)  {
-            dimension_0_init();
-            return;
-        }
-        vector<vector<double>> verts(n, vector<double>(dimension));
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < dimension; ++j) {
-                verts[i][j] = uniformDistribution(generator);
-            }
-        }
-        // feed verts into KD Tree
-        KDTree tree(verts);
-        vector<size_t> neighbors;
-        for (int i = 0; i < n; ++i) {
-            neighbors = tree.neighborhood_indices(verts[i], max_edge_weight);
-            for (const size_t ind : neighbors) {
-                double weight = euclideanDistance(verts[i], verts[ind]);
-                adj_list[i][ind] = weight;
-                adj_list[ind][i] = weight;
-            }
-        }
-    }
 
-    void dimension_0_init() {
-        for (int i = 0; i < n; i++) {
-            for (int j = i+1; j < n; j++) {
-                double potentialEdge = uniformDistribution(generator);
-                if (!edge_exclusion(n, 0, potentialEdge)) {
-                    adj_list[i][j] = potentialEdge;
-                    adj_list[j][i] = potentialEdge; // MAYBE KEEP THIS
+            for (int i = 0; i < n; i++) {
+                for (int j = i+1; j < n; j++) {
+                    double potentialEdge = uniformDistribution(generator);
+                    if (potentialEdge < (128.0/n * .05)) {
+                        adj_list[i][j] = potentialEdge;
+                        adj_list[j][i] = potentialEdge;
+                    }
+                }
+            }
+        }
+
+        else {
+
+            // Generate points
+            vector<vector<double>> verts(n, vector<double>(dimension));
+            for (int i = 0; i < n; ++i) {
+                for (int j = 0; j < dimension; ++j) {
+                    verts[i][j] = uniformDistribution(generator);
+                }
+            }
+
+            // Feed vertices into KD Tree
+            KDTree tree(verts);
+            vector<size_t> neighbors;
+            for (int i = 0; i < n; ++i) {
+                neighbors = tree.neighborhood_indices(verts[i], max_edge_weight);
+                for (const size_t ind : neighbors) {
+                    double weight = euclideanDistance(verts[i], verts[ind]);
+                    adj_list[i][ind] = weight;
+                    adj_list[ind][i] = weight;
                 }
             }
         }
     }
-
-    // void initialize_adjacency_list(int dimension) {
-    //     // Random edge weight (dimension = 0)
-    //     if (dimension == 0) {
-    //         for (int i = 0; i < n; i++) {
-    //             for (int j = i+1; j < n; j++) {
-    //                 double potentialEdge = uniformDistribution(generator);
-    //                 if (!edge_exclusion(n, dimension, potentialEdge)) {
-    //                     adj_list[i][j] = potentialEdge;
-    //                     adj_list[j][i] = potentialEdge; // MAYBE KEEP THIS
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     else {
-    //         // // Generate vertices, each row is a vertex with a point in (dimension) dimensions
-    //         // vector<vector<double>> vertices (n, vector<double>(dimension));
-    //         // for(int i = 0; i < n; i++) {
-    //         //     for(int j = 0; j < dimension; j++) {
-    //         //         vertices[i][j] = uniformDistribution(generator);
-    //         //     }
-    //         // }
-    //         // // Generate adjacency list 
-    //         // for (int i = 0; i < n; i++) {
-    //         //     for (int j = i+1; j < n; j++) {
-    //         //         adj_list[i][j] = euclideanDistance(vertices[i], vertices[j]);
-    //         //     }
-    //         // }
-    //         for (int i = 0; i < n - 1; ++i) {
-    //             for (int j = i + 1; j < n; ++j) {
-    //                 double dist = gen_dist(dimension);
-    //                 if (!edge_exclusion(n, dimension, dist)) {
-    //                     adj_list[i][j] = dist;
-    //                     adj_list[j][i] = dist;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 
     double max_edge_weight(int dimension) {
 
@@ -198,20 +154,6 @@ class Graph {
             return 1.4*(pow(n,-1.0/4.0));
         }
 
-        return 1.0;
-
-    }
-
-
-    bool edge_exclusion(int n, int dimension, double edge) {
-        if (dimension == 0) {
-            return edge > (128.0/n * .05);
-        }
-        return false;
-    }
-
-    // FOR TESTING ONLY, DELETE LATER
-    void insert_custom_edge(int i, int j, double weight) {
-        adj_list[i][j] = weight;
+        return 0;
     }
 };
