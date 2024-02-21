@@ -4,6 +4,7 @@
 #include <vector>
 #include <set>
 #include <unordered_map>
+#include "KDTree.hpp"
 
 using std::vector;
 using std::set;
