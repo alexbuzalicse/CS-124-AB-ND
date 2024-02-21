@@ -107,44 +107,81 @@ class Graph {
         seen_vertices.insert(v);
     }
 
-    void initialize_adjacency_list(int dimension) {
-        // Random edge weight (dimension = 0)
-        if (dimension == 0) {
-            for (int i = 0; i < n; i++) {
-                for (int j = i+1; j < n; j++) {
-                    double potentialEdge = uniformDistribution(generator);
-                    if (!edge_exclusion(n, dimension, potentialEdge)) {
-                        adj_list[i][j] = potentialEdge;
-                        adj_list[j][i] = potentialEdge; // MAYBE KEEP THIS
-                    }
-                }
+    void initialize_adjacency_list(int dimension, double max_edge_weight) {
+        // generate points
+        if (dimension == 0)  {
+            dimension_0_init();
+            return;
+        }
+        vector<vector<double>> verts(n, vector<double>(dimension));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < dimension; ++j) {
+                verts[i][j] = uniformDistribution(generator);
             }
         }
-        else {
-            // // Generate vertices, each row is a vertex with a point in (dimension) dimensions
-            // vector<vector<double>> vertices (n, vector<double>(dimension));
-            // for(int i = 0; i < n; i++) {
-            //     for(int j = 0; j < dimension; j++) {
-            //         vertices[i][j] = uniformDistribution(generator);
-            //     }
-            // }
-            // // Generate adjacency list 
-            // for (int i = 0; i < n; i++) {
-            //     for (int j = i+1; j < n; j++) {
-            //         adj_list[i][j] = euclideanDistance(vertices[i], vertices[j]);
-            //     }
-            // }
-            for (int i = 0; i < n - 1; ++i) {
-                for (int j = i + 1; j < n; ++j) {
-                    double dist = gen_dist(dimension);
-                    if (!edge_exclusion(n, dimension, dist)) {
-                        adj_list[i][j] = dist;
-                        adj_list[j][i] = dist;
-                    }
+        // feed verts into KD Tree
+        KDTree tree(verts);
+        vector<size_t> neighbors;
+        for (int i = 0; i < n; ++i) {
+            neighbors = tree.neighborhood_indices(verts[i], max_edge_weight);
+            for (const size_t ind : neighbors) {
+                double weight = euclideanDistance(verts[i], verts[ind]);
+                adj_list[i][ind] = weight;
+                adj_list[ind][i] = weight;
+            }
+        }
+    }
+
+    void dimension_0_init() {
+        for (int i = 0; i < n; i++) {
+            for (int j = i+1; j < n; j++) {
+                double potentialEdge = uniformDistribution(generator);
+                if (!edge_exclusion(n, 0, potentialEdge)) {
+                    adj_list[i][j] = potentialEdge;
+                    adj_list[j][i] = potentialEdge; // MAYBE KEEP THIS
                 }
             }
         }
     }
+
+    // void initialize_adjacency_list(int dimension) {
+    //     // Random edge weight (dimension = 0)
+    //     if (dimension == 0) {
+    //         for (int i = 0; i < n; i++) {
+    //             for (int j = i+1; j < n; j++) {
+    //                 double potentialEdge = uniformDistribution(generator);
+    //                 if (!edge_exclusion(n, dimension, potentialEdge)) {
+    //                     adj_list[i][j] = potentialEdge;
+    //                     adj_list[j][i] = potentialEdge; // MAYBE KEEP THIS
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     else {
+    //         // // Generate vertices, each row is a vertex with a point in (dimension) dimensions
+    //         // vector<vector<double>> vertices (n, vector<double>(dimension));
+    //         // for(int i = 0; i < n; i++) {
+    //         //     for(int j = 0; j < dimension; j++) {
+    //         //         vertices[i][j] = uniformDistribution(generator);
+    //         //     }
+    //         // }
+    //         // // Generate adjacency list 
+    //         // for (int i = 0; i < n; i++) {
+    //         //     for (int j = i+1; j < n; j++) {
+    //         //         adj_list[i][j] = euclideanDistance(vertices[i], vertices[j]);
+    //         //     }
+    //         // }
+    //         for (int i = 0; i < n - 1; ++i) {
+    //             for (int j = i + 1; j < n; ++j) {
+    //                 double dist = gen_dist(dimension);
+    //                 if (!edge_exclusion(n, dimension, dist)) {
+    //                     adj_list[i][j] = dist;
+    //                     adj_list[j][i] = dist;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     bool edge_exclusion(int n, int dimension, double edge) {
         if (dimension == 0) {
