@@ -23,7 +23,7 @@ def binary_matrix_maker(n : int, k : int) -> np.ndarray:
 
 def get_k(n : int) -> int:
     """ return the padded size k from an input size n """
-    return np.ceil(np.log2(n))
+    return 2 ** np.ceil(np.log2(n))
 
 def strassen_multiply(A : np.ndarray, B : np.ndarray, n_0 : int) -> np.ndarray:
     """
