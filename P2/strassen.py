@@ -30,6 +30,19 @@ def get_k(n : int) -> int:
     """ return the padded size k from an input size n """
     return 2 ** np.ceil(np.log2(n))
 
+def standard_multiply(U : np.ndarray, V : np.ndarray) -> np.ndarray:
+
+    n = U.shape[0]
+
+    prod = np.zeros((n,n),dtype=int)
+
+    for i in range(n):
+        for k in range(n):
+            for j in range(n):
+                prod[i,j] += U[i,k] * V[k,j]
+
+    return prod
+
 def strassen_multiply(U : np.ndarray, V : np.ndarray, n_0 : int) -> np.ndarray:
     """
     Takes in two numpy arrays A and B, and a cutoff point n_0. Performs Strassen's
@@ -42,7 +55,7 @@ def strassen_multiply(U : np.ndarray, V : np.ndarray, n_0 : int) -> np.ndarray:
 
     # Cutoff point
     if n <= n_0:
-        return U@V
+        return standard_multiply(U,V)
 
     # Pad arrays if necessary
     if n % 2 == 1:
