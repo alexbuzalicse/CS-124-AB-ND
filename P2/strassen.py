@@ -10,6 +10,8 @@ from numpy import linalg
 import sys
 import os
 import time
+from math import comb
+import matplotlib.pyplot as plt
 
 def binary_matrix_maker(n : int, k : int) -> np.ndarray:
     """ make a binary matrix for input size n, real size of matrix k """
@@ -118,6 +120,70 @@ def main():
 
     time_strassen = t1 - t0
 
+def triangle_finder(p : float, N : int) -> float:
+    """
+    Given a probability p, create an adjaceny matrix representation of a graph
+    G, which has probability p of including each edge. N x N matrix.
+    """
+    # choose n0 (change this later)
+    n0 = 64
+
+    # get the expected number of triangles
+    t_expected = comb(N, 3) * p ** 3
+
+    # create the A matrix probabilities
+    A = np.random.rand(N, N)
+
+    # assign edges
+    for i in range(N):
+        for j in range(N):
+            A[i][j] = 1 if A[i][j] < p else 0
+
+    # perform Strassen's algorithm to get A^3
+    A_copy = A.copy()
+    A = strassen_multiply(A, A, n0)
+    A = strassen_multiply(A, A_copy, n0)
+
+    # get number of calculated triangles
+    t_calc = A.trace() / 6.0
+
+    return t_calc
+
+def expected_triangles(p : float, N : int) -> float:
+    """
+    returns the number of expected triangles for probability p
+    for each edge and size N matrix.
+    """
+    return comb(N, 3) * p ** 3
+
+def triangle_results() -> None:
+    """ plots the results of expected vs. calculated number of triangles """
+    ps = np.array([0.01, 0.02, 0.03, 0.04, 0.05])
+    N = 1024
+
+    t_expected = np.array([expected_triangles(p, N) for p in ps])
+    t_calc = np.array([triangle_finder(p, N) for p in ps])
+
+    fig, ax = plt.subplots()
+
+    ALPHA = 1
+
+    for i in range(len(ps)):
+        ax.semilogy(ps[i], t_expected[i], "kx", alpha = ALPHA)
+        ax.semilogy(ps[i], t_calc[i], "bx", alpha = ALPHA)
+
+    ax.semilogy(ps[-1], t_expected[-1], "kx", label= "expected", alpha = ALPHA)
+    ax.semilogy(ps[-1], t_calc[-1], "bx", label = "calculated", alpha = ALPHA)
+    plt.grid()
+
+    ax.set_xlabel("Probability of Edge Inclusion", fontsize=16)
+    ax.set_ylabel("Number of Triangles", fontsize=16)
+    ax.set_title("Expected v. Calculated Triangles", fontsize=16)
+    ax.legend(fontsize=13)
+    plt.show()
+
+    plt.savefig("./triangles.png", bbox_inches='tight', dpi=200)
 
 if __name__ == "__main__":
-    main()
+    #main()
+    triangle_results()
