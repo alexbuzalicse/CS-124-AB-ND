@@ -11,7 +11,7 @@ import sys
 import os
 import time
 from math import comb
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 ### SET CUTOFF POINT
 n0 = 16
