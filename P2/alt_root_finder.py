@@ -17,6 +17,7 @@ def naive_cost(n :int) -> int:
 def analytic_strassen(n : int) -> float:
     """ the analytic cost expression for the number of flops """
     return 7 * n **(np.log2(7)) - 6 * n ** 2
+    #return 7 **(np.log(2 * n) / np.log(2)) - 6 * n ** 2
 
 def analytic_difference(n : int) -> float:
     """ difference in the cost of strassen and naive, analytically """
