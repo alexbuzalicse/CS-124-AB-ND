@@ -13,6 +13,9 @@ import time
 from math import comb
 import matplotlib.pyplot as plt
 
+### SET CUTOFF POINT
+n0 = 16
+
 def binary_matrix_maker(n : int, k : int) -> np.ndarray:
     """ make a binary matrix for input size n, real size of matrix k """
     mat_k = np.zeros(shape=(k,k))
@@ -85,7 +88,6 @@ def strassen_multiply(U : np.ndarray, V : np.ndarray, n_0 : int) -> np.ndarray:
     return Z[:n,:n]
 
 def main():
-
     # Command line arguments
     flag = int(sys.argv[1])
     n = int(sys.argv[2])
@@ -97,12 +99,8 @@ def main():
     A = np.reshape(content.split('\n')[:n**2],(n,n)).astype('int')
     B = np.reshape(content.split('\n')[n**2:-1],(n,n)).astype('int')
 
-
-    # cutoff point of strassen's algorithm
-    n_0 = 64 # get a real value here later, also will test multiple vals
-
     # determine strassen's output
-    C = strassen_multiply(A, B, n_0)
+    C = strassen_multiply(A, B, n0)
     for i in range(n):
         print(C[i,i])
     print()
@@ -112,8 +110,6 @@ def triangle_finder(p : float, N : int) -> float:
     Given a probability p, create an adjaceny matrix representation of a graph
     G, which has probability p of including each edge. N x N matrix.
     """
-    # choose n0 (change this later)
-    n0 = 64
 
     # get the expected number of triangles
     t_expected = comb(N, 3) * p ** 3
@@ -151,8 +147,18 @@ def triangle_results() -> None:
     t_expected = np.array([expected_triangles(p, N) for p in ps])
     t_calc = np.array([triangle_finder(p, N) for p in ps])
 
+    i = 0
+    for ex, calc in zip(t_expected, t_calc):
+        err = round(abs(calc - ex) / ex, 3)
+        ex = round(ex, 2)
+        calc = round(calc, 2)
+        ps[i] = round(ps[i], 2)
+        print (fr"{ps[i]} & {ex} & {calc} & {err}\\")
+        i += 1
+
     fig, ax = plt.subplots()
 
+    # set transparency
     ALPHA = 1
 
     for i in range(len(ps)):
@@ -167,9 +173,10 @@ def triangle_results() -> None:
     ax.set_ylabel("Number of Triangles", fontsize=16)
     ax.set_title("Expected v. Calculated Triangles", fontsize=16)
     ax.legend(fontsize=13)
-    plt.show()
+    #plt.show()
+    plt.close()
 
-    plt.savefig("./triangles.png", bbox_inches='tight', dpi=200)
+    #plt.savefig("./triangles.png", bbox_inches='tight', dpi=200)
 
 if __name__ == "__main__":
     main()
