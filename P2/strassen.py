@@ -185,5 +185,5 @@ def triangle_results() -> None:
     plt.savefig("./triangles.png", bbox_inches='tight', dpi=200)
 
 if __name__ == "__main__":
-    #main()
-    triangle_results()
+    main()
+    #triangle_results()
