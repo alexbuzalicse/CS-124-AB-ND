@@ -47,10 +47,10 @@ def strassen_multiply(U : np.ndarray, V : np.ndarray, n_0 : int) -> np.ndarray:
     # Pad arrays if necessary
     if n % 2 == 1:
 
-        X = np.zeros((n+1,n+1))
+        X = np.zeros((n+1,n+1),dtype=int)
         X[:n,:n] = U
 
-        Y = np.zeros((n+1,n+1))
+        Y = np.zeros((n+1,n+1),dtype=int)
         Y[:n,:n] = V
 
         nPrime = n+1
