@@ -1,5 +1,9 @@
 """
-attempt 2 at equation solving lol
+Script to find the theoretical root at which it becomes computationally
+less intensive to use naive matrix multiplication over Strassen's
+algorithm.
+
+Authors: Noah Dohrmann and Alex Buzali
 """
 
 import numpy as np
@@ -70,11 +74,9 @@ def analytic_cost_comparison():
     plt.show()
 
 def main() -> None:
-    # plot results
     #cost_comparison()
     #analytic_cost_comparison()
-
-    print(f"The root is {root_finder()}")
+    print(f"The root is {root_finder()}") # gives about 650
 
 if __name__ == "__main__":
     main()
