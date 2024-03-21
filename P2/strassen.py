@@ -85,40 +85,27 @@ def strassen_multiply(U : np.ndarray, V : np.ndarray, n_0 : int) -> np.ndarray:
     return Z[:n,:n]
 
 def main():
-    # size of matrix
-    n = int(sys.argv[1])
 
-    # determine padded matrix size, k
-    k = get_k(n)
+    # Command line arguments
+    flag = int(sys.argv[1])
+    n = int(sys.argv[2])
+    inputFileName = sys.argv[3]
 
-    # what kind of calc to run - get guidance on cmd args
-    type = sys.argv[2]
+    # Parse input file
+    file = open(inputFileName, "r")
+    content = file.read()
+    A = np.reshape(content.split('\n')[:n**2],(n,n)).astype('int')
+    B = np.reshape(content.split('\n')[n**2:-1],(n,n)).astype('int')
+
 
     # cutoff point of strassen's algorithm
-    n_0 = 100 # get a real value here later, also will test multiple vals
-
-    # make matrices to be of a size 2^k for some k
-    if (type == "binary"):
-        A = binary_matrix_maker(n, k)
-        B = binary_matrix_maker(n, k)
-    else:
-        # TODO: add other init types!
-        A = binary_matrix_maker(n, k)
-        B = binary_matrix_maker(n, k)
-
-    # determine true value of C = A B, and the time it takes
-    t0 = time.perf_counter()
-    C_true =  A @ B
-    t1 = time.perf_counter()
-
-    time_baseline = t1 - t0
+    n_0 = 64 # get a real value here later, also will test multiple vals
 
     # determine strassen's output
-    t0 = time.perf_counter()
-    C_strassen = strassen_multiply(A, B, n_0)
-    t1 = time.perf_counter()
-
-    time_strassen = t1 - t0
+    C = strassen_multiply(A, B, n_0)
+    for i in range(n):
+        print(C[i,i])
+    print()
 
 def triangle_finder(p : float, N : int) -> float:
     """
