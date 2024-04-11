@@ -34,7 +34,10 @@ def repeatedRandom(A, maxIterations):
         sPrime = np.random.choice([-1,1],n)
         if residue(A,sPrime) < residue(A,S):
             S = sPrime
-    return S
+
+        if residue(A,sPrime) == 0: return 0
+
+    return residue(A,S)
 
 def hillClimbing(A, maxIterations):
 
@@ -48,7 +51,9 @@ def hillClimbing(A, maxIterations):
         if residue(A,sPrime) < residue(A,S):
             S = sPrime
 
-    return S
+        if residue(A,sPrime) == 0: return 0
+
+    return residue(A,S)
 
 def simulatedAnnealing(A, maxIterations):
 
@@ -67,11 +72,11 @@ def simulatedAnnealing(A, maxIterations):
 
         else:
             prob = np.exp(-(resSPrime-resS)/T(iteration))
-
             choice = np.random.choice([0,1],p=[prob,1-prob])
             if choice == 0: S = sPrime
 
-        if residue(A,S) < residue(A,sPrimePrime):
+        if resS < residue(A,sPrimePrime):
             sPrimePrime = S
+        if resS == 0: return 0
 
-    return sPrimePrime
+    return residue(A,sPrimePrime)
